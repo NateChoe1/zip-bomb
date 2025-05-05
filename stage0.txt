@@ -1,0 +1,110 @@
+C
+                      zlib: header
+0000                  window size, 256 bytes
+1000                  compression method, deflate
+00                    compression level, fastest
+0                     fdict, no preset dictionary
+11101                 checksum
+
+D
+
+                      deflate: data start
+
+0                     deflate: initial block containing one byte, not final
+00                    no compression
+P                     padding
+1000000000000000      initial block length (1 byte)
+0111111111111111      initial block length checksum
+C
+01000001              block data (0x41, 'A')
+D
+
+1                     deflate: final very large block
+01                    compressed with dynamic huffman codes
+10111                 number of literal/length codes (286)
+00000                 number of distance codes (1)
+0111                  number of code length codes (18)
+000                   code length for 16 (0)
+000                   code length for 17 (0)
+100                   code length for 18 (1) ***
+000                   code length for 0  (0)
+000                   code length for 8  (0)
+000                   code length for 7  (0)
+000                   code length for 9  (0)
+000                   code length for 6  (0)
+000                   code length for 10 (0)
+000                   code length for 5  (0)
+000                   code length for 11 (0)
+000                   code length for 4  (0)
+000                   code length for 12 (0)
+000                   code length for 3  (0)
+000                   code length for 13 (0)
+000                   code length for 2  (0)
+000                   code length for 14 (0)
+100                   code length for 1  (1) ***
+
+                      deflate: literal/length alphabet
+                      note: our code lengths are:
+                      1: 1
+                      18: 1
+                      so our alphabet is:
+                      1: 0
+                      18: 1
+
+                      a bunch of zeros to get to code number 256 (end of block)
+                      (code 0)
+1                     138 zeros
+1111111
+                      (code 138)
+1                     118 zeros
+1101011
+                      (code 256)
+0                     code 256 has bit length 1
+                      (code 257)
+1                     28 zeros
+1000100
+                      (code 285)
+0                     code 285 has bit length 1
+
+                      deflate: end of literal/length alphabet
+
+                      deflate: distance alphabet
+0                     distance length 0 has bit length 1
+                      deflate: end of distance alphabet
+
+                      at this point, our literal/length alphabet has these bit
+                      lengths:
+
+                      256: 1
+                      285: 1
+
+                      and these encodings
+
+                      256: 0
+                      285: 1
+
+                      and our distance alphabet has this bit length
+
+                      0: 1
+
+                      and this encoding:
+
+                      0: 0
+
+                      begin data:
+                      each '10' is a block
+
+101010                3 blocks, now we're byte aligned
+
+R
+
+10101010              initial 0x55 byte
+
+R
+
+0                     end of data
+
+C
+                      zlib: adler32 checksum
+1001000011110011      s2
+1100101011011111      s1

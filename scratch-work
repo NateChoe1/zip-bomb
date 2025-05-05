@@ -1,0 +1,39 @@
+Some notes on where the s1 and s2 values for stage 0 come from.
+
+The important takeaway is that the final uncompressed data is exactly
+1116699765055 repeated bytes, so we can do some algebra to calculate a checksum
+without having to expand and process a terabyte of data.
+
+I was basically using this file as scratch paper, you're probably not going to
+get very much out of reading the rest of it.
+
+
+
+
+57 bytes -> 7 l2 blocks
+
+each additional byte is 4 more l2 blocks
+
+1048576 bytes (1 MiB) -> 57 bytes = 1048519 additional bytes = 4194076 additional l2 blocks
+
+4194083 l2 blocks total
+-> 258 l1 bytes each
+-> 4 l1 blocks each
+
+expands to 4328293656 l1 blocks
+
+stage 0 contains 7 l1 blocks already, giving 4328293663 l1 blocks total
+
+each l1 block turns into 258 raw bytes, giving 1116699765054 bytes total
+
+stage 0 contains an extra byte that we use for decompression, giving
+1116699765055 bytes in our final payload
+
+s1(n) = n * 0x41 + 1 (mod 65521)
+s2(n) = sum(s1, 1. n) (mod 65521)
+
+when expanded,
+s2(n) = (n^2+n)/2 * 0x41 + n
+
+s1(1116699765055) = 25216
+s2(1116699765055) = 14861
