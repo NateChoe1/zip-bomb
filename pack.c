@@ -85,6 +85,9 @@ static int copy(FILE *in, FILE *out) {
 		pad(out);
 		curr_mode = CANON;
 		break;
+	case 'E':
+		pad(out);
+		return 1;
 	case 'P':
 		pad(out);
 		break;
