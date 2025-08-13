@@ -1,0 +1,241 @@
+C
+
+                      zlib: header
+0000                  window size, 256 bytes
+1000                  compression method, deflate
+
+00                    compression level, fast algorithm
+0                     fdict, no dictionary
+11101                 checksum
+
+D
+
+                      deflate: data start
+
+00000000              deflate: nonce blocks to increase the header length. we
+0000000000000000      need these because later Rh+1 has to take up exactly 5
+1111111111111111      bytes. to make that possible, we insert these nonce bytes
+00000000              in our compressed stream and treat them as part of our
+0000000000000000      header. if we didn't have these, the header would be too
+1111111111111111      short to take up 5 whole bytes of compressed data.
+
+0                     deflate: Lh+1 ..H.. Lh+1
+00                    no compression
+P                     padding
+1000100000000000      block length (17 bytes)
+0111011111111111      block length checksum
+C                     block contents
+00001000
+00011101
+D
+00000000
+00000000
+00000000
+11111111
+11111111
+00000000
+00000000
+00000000
+11111111
+11111111
+00000000
+10001000
+00000000
+01110111
+11111111
+
+0                     deflate: Rh+1 (17, 17) == (9, 17) + (8, 17)
+10                    fixed huffman codes
+0000111               length 9
+01000000              distance 17
+0000110               length 8
+01000000              distance 17
+0000000               end of data
+
+0                     deflate: L1 Rh+1
+00                    no compression
+P                     padding
+1010000000000000      block length (5 bytes)
+0101111111111111      block length checksum
+01000001              block contents
+11010000
+00000011
+00100000
+00000000
+
+0                     deflate: L1 L1
+00                    no compression
+P                     padding
+1010000000000000      block length (5 bytes)
+0101111111111111      block length checksum
+00000000              block contents
+10100000
+00000000
+01011111
+11111111
+
+0                     deflate: L4 Rh+1 L1 L1 L4
+00                    no compression
+P                     padding
+0010100000000000      block length (20 bytes)
+1101011111111111      block length checksum
+                      block contents
+01000001              Rh+1
+11010000
+00000011
+00100000
+00000000
+00000000              L1
+10100000
+00000000
+01011111
+11111111
+00000000              L1
+10100000
+00000000
+01011111
+11111111
+00000000              L4
+00101000
+00000000
+11010111
+11111111
+
+0                     deflate: R4
+10                    fixed huffman codes
+0001000               length 10
+01000110              distance 20
+0001000               length 10
+01000110              distance 20
+0000000               end of data
+
+0                     deflate: L4 R4 L4 R4 L4
+00                    no compression
+P                     padding
+0010100000000000      block length (20 bytes)
+1101011111111111      block length checksum
+                      block contents
+01000010              R4
+00010001
+10000100
+00100011
+00000000
+00000000              L4
+00101000
+00000000
+11010111
+11111111
+01000010              R4
+00010001
+10000100
+00100011
+00000000
+00000000              L4
+00101000
+00000000
+11010111
+11111111
+
+0                     deflate: R4
+10                    fixed huffman codes
+0001000               length 10
+01000110              distance 20
+0001000               length 10
+01000110              distance 20
+0000000               end of data
+
+0                     deflate: L4 R4 L0 L0 Lt+1
+00                    no compression
+P                     padding
+0010100000000000      block length (20 bytes)
+1101011111111111      block length checksum
+                      block contents
+01000010              R4
+00010001
+10000100
+00100011
+00000000
+00000000              L0
+00000000
+00000000
+11111111
+11111111
+00000000              L0
+00000000
+00000000
+11111111
+11111111
+00000000              Lt+1
+11001000
+00000000
+00110111
+11111111
+
+0                     deflate: R4
+10                    fixed huffman codes
+0001000               length 10
+01000110              distance 20
+0001000               length 10
+01000110              distance 20
+0000000               end of data
+
+0                     deflate: L0
+00                    no compression
+P                     padding
+0000000000000000      block length (0 bytes)
+1111111111111111      block length checksum
+
+0                     deflate: L0
+00                    no compression
+P                     padding
+0000000000000000      block length (0 bytes)
+1111111111111111      block length checksum
+
+0                     deflate: Lt+1 Rt+1 ..T..
+00                    no compression
+P                     padding
+1100100000000000      block length (19 bytes)
+0011011111111111      block length checksum
+01000010              Rt+1
+00010000
+10000011
+10100001
+00000000
+00000000              ..T..
+00000000
+00000000
+11111111
+11111111
+10000000
+00000000
+00000000
+11111111
+11111111
+
+C
+R
+1111000011110000      ..T.. adler32 checksum
+1111111111111111
+D
+
+0                     deflate: Rt+1 (19 bytes)
+10                    fixed huffman codes
+0001000               length 10
+01000010              distance 19
+0000111               length 9
+01000010              distance 19
+0000000               end of data
+
+                      begin trailer
+
+00000000              deflate nonce blocks to pad the trailer
+0000000000000000      see header for why this is necessary
+1111111111111111
+10000000
+0000000000000000
+1111111111111111
+
+C                     adler32 checksum
+R
+1111000011110000
+1111111111111111

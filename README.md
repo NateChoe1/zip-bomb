@@ -1,46 +1,43 @@
-# Pretty large zip bomb
+# Pretty large zip bombs
 
-This is a handcrafted, pretty large zip bomb, suitable for tearing down
-[malicious web scrapers](https://idiallo.com/blog/zipbomb-protection).
+This repo contains some pretty large zip bombs, suitable for tearing down
+[https://blog.haschek.at/2017/how-to-defend-your-website-with-zip-bombs.html](malicious)
+[web](https://idiallo.com/blog/zipbomb-protection)
+[scrapers](https://ache.one/notes/html_zip_bomb). These zip bombs are all
+handcrafted. For automatically generated, very large recursive zip bombs, see
+[IED](https://github.com/NateChoe1/ied).
 
-The compressed file is just 1 MiB, but it decompresses to over a terabyte of
-data, which is close to optimal with two layers of deflate compression.
+## History
 
-## Instructions
+The first zip bomb in this repo (stored in `./primitive`) was hacked together in
+a weekend as a proof of concept doubly compressed zip bomb.
 
-1. Compile tools
+A few months after handcrafting that initial payload, I wrote a program called
+[IED](https://github.com/NateChoe1/ied) to generate much larger recursively
+compressed payloads programatically. IED can create payloads much, [much
+larger](https://natechoe.dev/blog/2025-08-04.html) than anything I could ever
+create by hand.
 
-   ```bash
-   make
-   ```
+A couple of weeks after the development of IED, I decided to come back and
+create an "infinitely large" zip bomb as a
+[quine](https://honno.dev/gzip-quine/). That is stored in `./quine`.
 
-2. Build unpadded stage 1
+## Tools
 
-   ```bash
-   ./pack stage1.txt stage1.z
-   ```
+These zip bombs are created with some small C tools that I wrote. To compile
+them, just run `make`.
 
-3. Build the rest of stage 1
+## Directories
 
-   ```bash
-   ./insert stage1.z 43 1048576 85 > final.z
-   ```
-
-4. Verify result
-
-   ```bash
-   cat final.z | openssl zlib -d > /dev/null
-   cat final.z | openssl zlib -d | openssl zlib -d
-   ```
-
-   The first command should NOT output an error
-
-   The second command should give a _very_ long string of `A`s.
-
-## Serving
-
-You can serve final.z with the header `Content-Encoding: deflate, deflate`
+| Path | Description |
+| ---- | ----------- |
+| `./primitive` | Basic doubly compressed zip bomb, decompresses twice from around 1 megabyte to around 1 terabyte. |
+| `./quine` | Quine zip bomb, infinitely decompresses with an amortized compression ratio of 1032x per layer |
 
 ## Licensing
 
-I'm donating this to the public domain. Use it however you'd like.
+I'm donating all of the code and zip bombs in this repo to the public domain,
+feel free to use it however you want.
+
+Although I can't enforce it, please give me credit if you decide to use any of
+these if possible.
