@@ -1,1 +1,8 @@
-../pack
+#!/bin/sh
+
+if [ $# -lt 1 ] ; then
+	echo "Usage: $0 [file.txt]" > /dev/stderr
+	exit 1
+fi
+
+../pack <(m4 "$1")
