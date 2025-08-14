@@ -1,12 +1,12 @@
 m4_include(`macros.m4')
 
 C                     zlib: header
-0001                  window size, 512 bytes
+0000                  window size, 256 bytes
 1000                  compression method, deflate
 
-00                    compression level, fast algorithm
+01                    compression level, fast algorithm
 0                     fdict, no dictionary
-11001                 checksum
+11011                 checksum
 
 D                     deflate: data start
 
@@ -23,7 +23,7 @@ m4_define(`hlen_1', `17')   the header length plus one is 17 bytes
 LL_b(hlen_1)          deflate: Lh+1 ..H.. Lh+1
 C                     ..H..
 00001000
-00011101
+01011011
 D
 L_b(0)
 L_b(0)
@@ -217,8 +217,8 @@ L_b(0)                ..T..
 end_b
 C
 R
-0011111101001111      ..T.. adler32 checksum
-1100111100010001
+1000100100000111      ..T.. adler32 checksum
+1101000010011011
 D
 
 Rt_1_b                Rt+1
@@ -230,5 +230,5 @@ end_b
 
 C                     adler32 checksum
 R
-0011111101001111      ..T.. adler32 checksum
-1100111100010001
+1000100100000111      ..T.. adler32 checksum
+1101000010011011
