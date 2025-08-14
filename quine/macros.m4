@@ -22,16 +22,7 @@ binary_lsbf_inv($1, 16)
 m4_define(`L_b', `m4_dnl   expands to $1 * 5 bytes
 LL_b(m4_eval(`$1 * 5'))')
 
-m4_define(`R4_b', `
-0                     deflate: R4
-10                    fixed huffman codes
-0001000               length 10
-01000110              distance 20
-0001000               length 10
-01000110              distance 20
-0000000               end of data
-')
-m4_define(`Rh_1_b', `
+m4_define(`R17l_b', `
 0                     deflate: Rh+1 (17, 17) == (9, 17) + (8, 17)
 10                    fixed huffman codes
 0000111               length 9
@@ -40,12 +31,38 @@ m4_define(`Rh_1_b', `
 01000000              distance 17
 0000000               end of data
 ')
-m4_define(`Rt_1_b', `
+m4_define(`Rh_1_b', `R17l_b')
+
+m4_define(`R19l_b', `
 0                     deflate: Rt+1 (19 bytes)
 10                    fixed huffman codes
 0001000               length 10
 01000010              distance 19
 0000111               length 9
 01000010              distance 19
+0000000               end of data
+')
+m4_define(`Rt_1_b', `R19l_b')
+
+m4_define(`R20l_b', `
+0                     deflate: R4
+10                    fixed huffman codes
+0001000               length 10
+01000110              distance 20
+0001000               length 10
+01000110              distance 20
+0000000               end of data
+')
+m4_define(`R4_b', `R20l_b')
+
+m4_define(`R26l7_b', `   note that this sequence is 7 bytes long and not 5
+0
+10                    fixed huffman codes
+00010010              length 11
+01001100              distance 26
+0000110               length 8
+01001100              distance 26
+0000101               length 7
+01001100              distance 26
 0000000               end of data
 ')
