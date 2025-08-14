@@ -27,7 +27,7 @@ int main(int argc, char **argv) {
 	long offset = atol(argv[2]);
 	long target = atol(argv[3]);
 	int byte = atoi(argv[4]);
-	long insert = target - size;
+	long insert = target < 0 ? -target : target - size;
 
 	for (long i = 0; i < size; ++i) {
 		int c = fgetc(in);

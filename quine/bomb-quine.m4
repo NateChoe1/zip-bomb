@@ -1,12 +1,12 @@
 m4_include(`macros.m4')
 
 C                     zlib: header
-0000                  window size, 256 bytes
+0001                  window size, 512 bytes
 1000                  compression method, deflate
 
 00                    compression level, fast algorithm
 0                     fdict, no dictionary
-11101                 checksum
+11001                 checksum
 
 D                     deflate: data start
 
@@ -155,7 +155,8 @@ bomb_start
 R26l7_b               deflate: Rt+1
 
 bomb_start            bomb data
- 10101010             51793 repetitions of this byte
+R
+ 10101010             we need to insert 51793 repetitions of this byte
 		      this specific number keeps the adler32 checksum constant
                       across decompression layers.
 
@@ -216,8 +217,8 @@ L_b(0)                ..T..
 end_b
 C
 R
-1111000011110000      ..T.. adler32 checksum
-1111111111111111
+0011111101001111      ..T.. adler32 checksum
+1100111100010001
 D
 
 Rt_1_b                Rt+1
@@ -229,5 +230,5 @@ end_b
 
 C                     adler32 checksum
 R
-1111000011110000      ..T.. adler32 checksum
-1111111111111111
+0011111101001111      ..T.. adler32 checksum
+1100111100010001
