@@ -30,9 +30,9 @@ based on another [amazing article](https://research.swtch.com/zip) by Russ Cox.
 
 ### High level explanation
 
-In the gzip quine (see the [other article](https://honno.dev/gzip-quine/)), we
-saw that it's possible to treat DEFLATE payloads as code, and to write a quine
-which looks like this:
+In the gzip quine (see the [other](https://honno.dev/gzip-quine/)
+[articles](https://research.swtch.com/zip)), we saw that it's possible to treat
+DEFLATE payloads as code, and to write a quine which looks like this:
 
 ```
 gzip header
