@@ -9,7 +9,7 @@ based on another [amazing article](https://research.swtch.com/zip) by Russ Cox.
 
 ## Build instructions
 
-1. Unpack
+1. Pack
 
    ```shell
    ./pack bomb-quine.m4 > pack.z
