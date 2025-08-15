@@ -1,7 +1,7 @@
 # Pretty large zip bombs
 
 This repo contains some pretty large zip bombs, suitable for tearing down
-[https://blog.haschek.at/2017/how-to-defend-your-website-with-zip-bombs.html](malicious)
+[malicious](https://blog.haschek.at/2017/how-to-defend-your-website-with-zip-bombs.html)
 [web](https://idiallo.com/blog/zipbomb-protection)
 [scrapers](https://ache.one/notes/html_zip_bomb). These zip bombs are all
 handcrafted. For automatically generated, very large recursive zip bombs, see
