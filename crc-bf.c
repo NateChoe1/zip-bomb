@@ -250,6 +250,13 @@ static int force_crc(int argc, char **argv) {
 	}
 
 	long target;
+
+#define TARGET_ITSELF -1
+	if (strcmp(argv[2], "itself") == 0) {
+		target = TARGET_ITSELF;
+		goto got_target;
+	}
+
 	char *e;
 	target = strtol(argv[2], &e, 16);
 	if (e == NULL || *e != '\0' || target < 0 || target > 0xffffffff) {
@@ -257,6 +264,7 @@ static int force_crc(int argc, char **argv) {
 		ret = 1;
 		goto end;
 	}
+got_target:
 
 	size_t offsets_len = argc - 3;
 	size_t *offsets = alloca(offsets_len * sizeof(size_t));
@@ -312,13 +320,19 @@ next:
 	}
 
 	uint64_t x;
-	x = divide(((uint64_t) target) ^ msg_p, offsets_p, MODULUS);
+
+	if (target == TARGET_ITSELF) {
+		x = divide(msg_p ^ 0xfffffffflu, offsets_p ^ 1, MODULUS);
+	} else {
+		x = divide(((uint64_t) target) ^ msg_p, offsets_p, MODULUS);
+	}
 	uint32_t native = reverse_bytes((uint32_t) x);
 	printf("%02x %02x %02x %02x\n",
 			(native >> 24) & 0xff,
 			(native >> 16) & 0xff,
 			(native >> 8) & 0xff,
 			(native) & 0xff);
+#undef TARGET_ITSELF
 
 	ret = 0;
 end:
