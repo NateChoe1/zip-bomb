@@ -1,4 +1,4 @@
-all: adler-bf adler32 pack insert
+all: adler-bf adler32 crc-bf pack insert
 
 %: %.c
-	$(CC) $< -o $@
+	$(CC) -g -Wall -Wextra $< -o $@
