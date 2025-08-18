@@ -19,7 +19,7 @@ larger](https://natechoe.dev/blog/2025-08-04.html) than anything I could ever
 create by hand.
 
 A couple of weeks after the development of IED, I decided to come back and
-create an "infinitely large" zip bomb as a
+create an "infinitely large" zlib bomb as a
 [quine](https://honno.dev/gzip-quine/). That is stored in `./quine`.
 
 ## Tools

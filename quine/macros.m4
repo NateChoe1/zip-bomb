@@ -33,6 +33,16 @@ m4_define(`R17l_b', `
 ')
 m4_define(`Rh_1_b', `R17l_b')
 
+m4_define(`R18l_b', `
+0                     deflate: Rh+1 (18, 18) == (9, 18) + (9, 18)
+10                    fixed huffman codes
+0000111               length 9
+01000100              distance 18
+0000111               length 9
+01000100              distance 18
+0000000               end of data
+')
+
 m4_define(`R19l_b', `
 0                     deflate: Rt+1 (19 bytes)
 10                    fixed huffman codes
@@ -64,5 +74,17 @@ m4_define(`R26l7_b', `   note that this sequence is 7 bytes long and not 5
 01001100              distance 26
 0000101               length 7
 01001100              distance 26
+0000000               end of data
+')
+
+m4_define(`R27l7_b', `   note that this sequence is 7 bytes long and not 5
+0
+10                    fixed huffman codes
+00010010              length 11
+01001010              distance 27
+0000110               length 8
+01001010              distance 27
+0000110               length 7
+01001010              distance 27
 0000000               end of data
 ')

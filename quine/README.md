@@ -1,18 +1,18 @@
 # Quine bomb
 
-This is a zlib quine bomb that infinitely expands exponentially based on the
-number of decompression layers.
+This directory contains two infinitely large quine bombs, one with zlib and
+another with gzip.
 
 This would not have been possible without an [amazing
 article](https://honno.dev/gzip-quine/) by Matthew Barber, which was largely
 based on another [amazing article](https://research.swtch.com/zip) by Russ Cox.
 
-## Build instructions
+## Build instructions (zlib)
 
 1. Pack
 
    ```shell
-   ./pack bomb-quine.m4 > pack.z
+   ./pack zlib-quine.m4 > pack.z
    ```
 1. Insert
 
@@ -24,6 +24,32 @@ based on another [amazing article](https://research.swtch.com/zip) by Russ Cox.
 
 ```shell
 ./adler-bf output.z 52194 52213
+```
+
+## Build instructions (gzip)
+
+1. Pack
+
+   ```shell
+   ./pack gzip-bomb.m4 > pack.gz
+   ```
+1. Insert
+
+   ```shell
+   ./insert pack.gz 358 -3224349840 85 > output.gz
+   ```
+
+## Calculating the checksums
+
+```
+$ ./crc-bf fixed-point 85     # 10101010 in binary
+fe9506db
+$ ./crc-bf force-crc <(head -c358 pack.gz) fe9506db 165
+cf 91 03 eb
+```
+
+```
+$ ./crc-bf force-crc pack.gz itself 538 556
 ```
 
 ## Explanation
