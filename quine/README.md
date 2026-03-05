@@ -216,7 +216,7 @@ this:
    2 arithmetic)
 
    For example, `11011` would turn into `x^4 + x^3 + x + 1`
-1. Multiply this polynomial by `x^32
+1. Multiply this polynomial by `x^32`
 
    `11011` now turns into `x^36 + x^35 + x^33 + x^32`
 1. Add `(x^31 + x^30 + x^29 + x^28 + ... + x + 1) * x^(message length-1)`
