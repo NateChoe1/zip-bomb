@@ -146,7 +146,7 @@ Rxly_b    - Repeats the last x bytes, but takes up y bytes.
 end_b     - Equivalent to L_b(0) except the BFINAL bit is set.
 ```
 
-### Checksum
+### Zlib Checksum
 
 The most theoretically interesting thing here is getting all of the checksums to
 match. Zlib uses the Adler32 checksum, which can be implemented in pseudocode
@@ -206,6 +206,72 @@ If we put 51794 repeated characters in our bomb, it will decompress into
 To actually calculate the checksum, I just brute-forced all 4.2 billion possible
 values to see which one worked.
 
+### Gzip Checksum
+
+Getting the gzip checksum to match is actually computationally much easier than
+the zlib checksum. Gzip uses the CRC-32 checksum algorithm, which works like
+this:
+
+1. Take your message in binary and convert it into a polynomial over GF(2) (mod
+   2 arithmetic)
+
+   For example, `11011` would turn into `x^4 + x^3 + x + 1`
+1. Multiply this polynomial by `x^32
+
+   `11011` now turns into `x^36 + x^35 + x^33 + x^32`
+1. Add `(x^31 + x^30 + x^29 + x^28 + ... + x + 1) * x^(message length-1)`
+
+   Here we're adding `x^36 + x^35 + x^34 + x^33 + ... + x^5 + x^4`, and are left
+   with `x^34 + x^31 + x^30 + ... + x^5 + x^4`. Remember that we're using mod 2
+   arithmetic, so `x^36 + x^36 = 0`.
+1. Divide this polynomial by the polynomial represented by
+   `100000100110000010001110110110111` and take the remainder
+
+   In this case, we get a quotient of `x^4` and a remainder of
+   `100000100110000010001110110110111`.
+1. Invert the remainder
+
+   The final CRC value is `011111011001111101110001001001000`. This is stored
+   little-endian.
+
+In code that might look like this.
+
+```
+result = 0xffffffff
+for each bit:
+    result ^= bit << 31
+    mask = 0x104c11db7 if (result & (1 << 31)) else 0
+    result <<= 1
+    result ^= mask
+return flip_bits(~result)
+```
+
+There are two potential problems with our gzip checksum. The first is that since
+the bomb area changes size with each decompression layer, that might affect the
+CRC in unpredictable ways. The second is that the gzip file has to contain the
+CRC within itself, but the contained CRC value may change the overall CRC value.
+
+Both of these problems can be solved by noting that since the CRC polynomial is
+irreducible, we're working with a finite field. For the first issue, we might
+want to find some polynomial `f(x)`, such that `f(x)*x^8 + U(x) = f(x)`. This
+way, every time we see a `U(x)` byte in our input, the CRC remains unchanged.
+Algebraically, using mod 2 arithmetic, this expression reduces to `f(x) = U(x) /
+(x^8+1)`, which can be calculated using the extended Euclidean algorithm.
+
+For the second issue, we can take our original message, zero out the bits where
+the CRC would be stored, and store it in `m(x)`. Then, we could create a second
+polynomial with ones only at the bits where the CRC would be stored and store
+that in `o(x)`. Note that if the CRC is `c(x)`, then `m(x) + o(x)*c(x)` is just
+the original message. We want `m(x) + o(x)*c(x) = c(x) + 0xffffffff`, which
+reduces to `c(x) = (m(x)+0xffffffff)/(o(x)+1)`. This is also easy to calculate.
+
+### Gzip ISIZE
+
+Unfortunately, Gzip files contain an ISIZE field, which means that we have to
+use the same trick with Bezout coefficients that we used with the Adler32
+checksum, except over mod `2^32`. This means that the final gzip bomb is around
+3 gigabytes large.
+
 ### Extra notes
 
 My zlib header uses the "fast" decompression method because the when I used the
@@ -216,5 +282,6 @@ the actual payload is byte aligned. In retrospect, I don't think this was
 necessary since I could just use different Bezout coefficients while calculating
 the checksum.
 
-The `R26l7_b` macro, used to expand the bomb header, is 7 bytes long instead of
-5 because I couldn't find a working 40 bit sequence with fixed Huffman tables.
+The `R26l7_b` and `R27l7_b` macros, used to expand the bomb headers, are 7 bytes
+long instead of 5 because I couldn't find working 40 bit sequences with fixed
+Huffman tables.
