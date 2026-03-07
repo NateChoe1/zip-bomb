@@ -15,7 +15,7 @@ a weekend as a proof of concept doubly compressed zip bomb.
 A few months after handcrafting that initial payload, I wrote a program called
 [IED](https://github.com/NateChoe1/ied) to generate much larger recursively
 compressed payloads programatically. IED can create payloads much, [much
-larger](https://natechoe.dev/blog/2025-08-04.html) than anything I could ever
+larger](https://natechoe.dev/blog/2025/08/04/0-migrated.html) than anything I could ever
 create by hand.
 
 A couple of weeks after the development of IED, I decided to come back and
