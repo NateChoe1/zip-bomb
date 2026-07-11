@@ -36,20 +36,21 @@ based on another [amazing article](https://research.swtch.com/zip) by Russ Cox.
 1. Insert
 
    ```shell
-   ./insert pack.gz 358 -3224349840 85 > output.gz
+   ./insert pack.gz 260 -3224349840 85 > output.gz
    ```
 
 ## Calculating the checksums
 
 ```
-$ ./crc-bf fixed-point 85     # 10101010 in binary
+$ ./crc-bf fixed-point 85     # the bomb byte
 fe9506db
-$ ./crc-bf force-crc <(head -c358 pack.gz) fe9506db 165
-cf 91 03 eb
+$ ./crc-bf force-crc <(head -c260 pack.gz) fe9506db 80
+cb fc ea 45
 ```
 
 ```
-$ ./crc-bf force-crc pack.gz itself 538 556
+$ ./crc-bf force-crc pack.gz itself 440 458
+e0 ef ad 4d
 ```
 
 ## Explanation

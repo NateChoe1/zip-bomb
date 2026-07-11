@@ -17,10 +17,32 @@ L_b(0)                deflate: nonce block to increase the header length. see
                       know if this is necessary, i just wanted to reuse my r20
                       block.
 
-m4_define(`hlen', `15')     the header is 15 bytes
-m4_define(`hlen_1', `20')   the header length plus one is 20 bytes
+                      luckily, this is a 15 byte header, so we can use this very
+                      basic quine for headers of length 3 or less
 
-LL_b(hlen_1)          Lh+1 ..H.. Lh+1
+                      print 0 (start of header)
+                      print 0
+                      print 0 (end of header)
+                      print 4
+                      print 0
+                      print 0
+                      print 0
+                      print 4
+                      repeat 4 4
+                      print 4
+                      repeat 4 4
+                      print 4
+                      repeat 4 4
+                      print 4
+                      repeat 4 4
+                      print 4
+                      a
+                      b
+                      c
+                      d
+
+L_b(4)                print 4
+C
 0001111110001011      ..H..
 0000100000000000
 0000000000000000
@@ -28,44 +50,31 @@ LL_b(hlen_1)          Lh+1 ..H.. Lh+1
 0000001011111111
 D
 L_b(0)
-LL_b(hlen_1)          Lh+1
-
-R20l_b                Rh+1
-L_b(1)                L1 Rh+1
-R20l_b
-L_b(1)                L1 L1
-L_b(1)
-L_b(4)                L4 Rh+1 L1 L1 L4
-R20l_b
-L_b(1)
-L_b(1)
-L_b(4)
-R4_b                  R4
-L_b(4)                L4 R4 L0 L0 Lt+1
-R4_b
-L_b(0)
-L_b(0)
-LL_b(20)
-
-LL_b(20)              Lt+1 Rt+1 ..T..
-R20l_b                Rt+1
-L_b(0)                ..T..
-L_b(0)
-LL_b(4)
-
-R20l_b
-L_b(0)
-L_b(0)
-LL_b(4)
+L_b(4)                print 4
+R20l_b                repeat 4 4
+L_b(4)                print 4
+R20l_b                repeat 4 4
+L_b(4)                print 4
+R20l_b                repeat 4 4
+L_b(4)                print 4
+R20l_b                repeat 4 4
+L_b(4)                print 4
 R
 C
-1100111110010001     magic bits to fix the crc at the bomb
-0000001111101011
+1100101111111100     magic bits to fix the crc at the bomb
+1110101001000101
 D
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
 
 m4_define(`bomb_start', `dnl   stolen from the zlib bomb. note that theres an
-                               extra bomb byte
-L_b(0)
+                         dnl   extra bomb byte
 0011011100000011
 1000000010000010
 0100000000000000
@@ -76,39 +85,35 @@ L_b(0)
 10101010
 ')
 
-m4_define(`bomb_header_len', `20')
-m4_define(`bomb_header_len_1', `27')
+m4_define(`bomb_start_1', `20')
 
-L_b(0)                ..H.. nonce header for the second quine
+L_b(0)                print 0
+L_b(0)                print 0
+L_b(0)                print 0
+L_b(4)                print 4
+L_b(0)                print 0
+L_b(0)                print 0
+L_b(0)                print 0
+L_b(4)                print 4
+R20l_b                repeat 4 4
+L_b(4)                print 4
+R20l_b                repeat 4 4
+L_b(4)                print 4
+R20l_b                repeat 4 4
+L_b(4)                print 4
+R20l_b                repeat 4 4
+L_b(4)                print 4
+R20l_b                part of the tail
 L_b(0)
 L_b(0)
-L_b(4)                Lh+1 ..H.. Lh+1
-L_b(0)
-L_b(0)
-L_b(0)
-L_b(4)
-L_b(1)                L1 Rh+1
+LL_b(bomb_start_1)
 R20l_b
-L_b(1)                L1 L1
-L_b(1)
-L_b(4)                L4 Rh+1 L1 L1 L4
+L_b(0)
+L_b(0)
+LL_b(bomb_start_1)
 R20l_b
-L_b(1)
-L_b(1)
-L_b(4)
-R20l_b                R4
-L_b(4)                L4 R4 L0 L0 Lt+1
-R20l_b
-L_b(0)
-L_b(0)
-LL_b(bomb_header_len_1)
-R20l_b                R4
-L_b(0)
-L_b(0)
-LL_b(bomb_header_len_1)  Lt+1 Rt+1 ..T..
-R27l7_b
 bomb_start
-R27l7_b
+R20l_b
 bomb_start
 
 R
