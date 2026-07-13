@@ -50,7 +50,7 @@ cb fc ea 45
 
 ```
 $ ./crc-bf force-crc pack.gz itself 440 458
-e0 ef ad 4d
+01 47 10 05
 ```
 
 ## Explanation
